@@ -91,6 +91,9 @@ static PuzzleImageTypeCode puzzle_get_image_type_from_fp(FILE * const fp)
     This is probably based on white and black areas around the image
     to get a better comparison. It's kinda useless to compare the average
     gray value of a completely white background
+
+    Or based on variable names, maybe it just tries to remove the background 
+    no matter the colour 
 */
 static int puzzle_autocrop_axis(PuzzleContext * const context,
                                 PuzzleView * const view,
@@ -134,7 +137,9 @@ static int puzzle_autocrop_axis(PuzzleContext * const context,
     chunk_n = chunk_n1;
 
     printf("\nAutocropping axis omaptrinic: %d nmaptrinc; %d  axisn: %u  axiso: %u ", omaptrinc,nmaptrinc, axisn, axiso);
+    printf("");
 
+    //omaptrinc and nmaptrinc are constants for navigating the image mapped to the map-array
     do {
         chunk_contrast = 0.0;
         chunk_o = chunk_o1;
@@ -318,7 +323,12 @@ static int puzzle_getview_from_gdimage(PuzzleContext * const context,
     printf("Loopcounter %d \n", loopcounter);
     return 0;
 }
+/*
+TODO
 
+has something to do with the average levels, 
+
+*/
 static double puzzle_softedgedlvl(const PuzzleView * const view,
                                   const unsigned int x, const unsigned int y)
 {
@@ -402,7 +412,10 @@ static double puzzle_get_avglvl(const PuzzleView * const view,
 
 
 /*
-What do we do here??
+Divides the image into squares, default 9*9 and calculates the average
+gray level of reach square
+
+lambdas = number of squares in one axis
 */
 static int puzzle_fill_avglgls(PuzzleContext * const context,
                                PuzzleAvgLvls * const avglvls,
@@ -499,6 +512,11 @@ static int puzzle_fill_avglgls(PuzzleContext * const context,
     return 0;
 }
 
+
+/*
+    is used to summarize the averagelevels
+
+*/
 static unsigned int puzzle_add_neighbors(double ** const vecur,
                                          const unsigned int max_neighbors,
                                          const PuzzleAvgLvls * const avglvls,
@@ -551,7 +569,10 @@ static unsigned int puzzle_add_neighbors(double ** const vecur,
     }    
     return neighbors;
 }
+/*
+Calculating the dvec values based on averagelevels
 
+*/
 static int puzzle_fill_dvec(PuzzleDvec * const dvec,
                             const PuzzleAvgLvls * const avglvls)
 {
